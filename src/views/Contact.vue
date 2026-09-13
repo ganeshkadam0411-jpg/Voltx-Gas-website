@@ -1,19 +1,26 @@
 <script setup>
+import { reactive, ref } from 'vue'
 import facebookIcon from '../Media/facebook-app-symbol.svg'
 import instagramIcon from '../Media/instagram.svg'
 import linkedinIcon from '../Media/linkedin-logo.svg'
 import twitterIcon from '../Media/twitter.svg'
 
-const formFields = [
-  { label: 'Name', name: 'name', type: 'text', placeholder: 'Name' },
-  { label: 'Email Address', name: 'email', type: 'email', placeholder: 'Email' },
-  { label: 'Telephone No.', name: 'telephone', type: 'tel', placeholder: 'Telephone No.' },
-  { label: 'Message', name: 'message', type: 'textarea', placeholder: 'Message' },
-  { label: 'Consumption', name: 'consumption', type: 'text', placeholder: 'Consumption Figures' },
-  { label: 'AQ', name: 'aq', type: 'text', placeholder: 'AQ' },
-  { label: 'MPRN Number', name: 'mprn', type: 'text', placeholder: 'MPRN Number' },
-  { label: 'Supply Site Address', name: 'address', type: 'text', placeholder: 'Supply Site Address' },
-]
+const formState = reactive({
+  name: '',
+  email: '',
+  telephone: '',
+  message: '',
+  energyType: 'Green Energy',
+  consumptionKnown: 'Yes',
+  consumption: '',
+  aq: '',
+  mprn: '',
+  address: '',
+})
+
+const isSubmitting = ref(false)
+const feedback = ref('')
+const feedbackType = ref('')
 
 const socialLinks = [
   {
@@ -37,6 +44,40 @@ const socialLinks = [
     img: linkedinIcon,
   },
 ]
+
+const submitForm = async () => {
+  isSubmitting.value = true
+  feedback.value = ''
+  feedbackType.value = ''
+
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formState),
+    })
+
+    const payload = await response.json()
+
+    if (!response.ok) {
+      throw new Error(payload.message || 'Unable to send your enquiry right now.')
+    }
+
+    feedback.value = payload.message
+    feedbackType.value = 'success'
+
+    Object.keys(formState).forEach((key) => {
+      formState[key] = key === 'energyType' ? 'Green Energy' : key === 'consumptionKnown' ? 'Yes' : ''
+    })
+  } catch (error) {
+    feedback.value = error.message
+    feedbackType.value = 'error'
+  } finally {
+    isSubmitting.value = false
+  }
+}
 </script>
 
 <template>
@@ -92,16 +133,18 @@ const socialLinks = [
         </div>
 
         <div class="rounded-3xl border border-slate-200 bg-slate-50/90 p-6 shadow-sm sm:p-8">
-          <form class="space-y-5">
+          <form class="space-y-5" @submit.prevent="submitForm">
             <div class="space-y-2">
               <label for="name" class="block text-sm font-medium text-slate-800">
-                Name <span class="text-[#e53935">*</span>
+                Name <span class="text-[#e53935]*">*</span>
               </label>
               <input
                 id="name"
+                v-model="formState.name"
                 name="name"
                 type="text"
                 placeholder="Name"
+                required
                 class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#FD5D0B] focus:ring-2 focus:ring-[#FD5D0B]/20"
               />
             </div>
@@ -113,9 +156,11 @@ const socialLinks = [
                 </label>
                 <input
                   id="email"
+                  v-model="formState.email"
                   name="email"
                   type="email"
                   placeholder="Email"
+                  required
                   class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#FD5D0B] focus:ring-2 focus:ring-[#FD5D0B]/20"
                 />
               </div>
@@ -130,9 +175,11 @@ const socialLinks = [
                   </span>
                   <input
                     id="telephone"
+                    v-model="formState.telephone"
                     name="telephone"
                     type="tel"
                     placeholder="Telephone No."
+                    required
                     class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-12 pr-4 text-sm text-slate-800 outline-none transition focus:border-[#FD5D0B] focus:ring-2 focus:ring-[#FD5D0B]/20"
                   />
                 </div>
@@ -145,6 +192,7 @@ const socialLinks = [
               </label>
               <textarea
                 id="message"
+                v-model="formState.message"
                 name="message"
                 rows="4"
                 placeholder="Message"
@@ -158,15 +206,15 @@ const socialLinks = [
               </label>
               <div class="flex items-center gap-6 pt-1 text-sm text-slate-700">
                 <label class="inline-flex items-center gap-2">
-                  <input type="radio" name="energyType" class="h-4 w-4 accent-[#FD5D0B]" />
+                  <input v-model="formState.energyType" type="radio" value="Green Energy" name="energyType" class="h-4 w-4 accent-[#FD5D0B]" />
                   <span>Green Energy</span>
                 </label>
                 <label class="inline-flex items-center gap-2">
-                  <input type="radio" name="energyType" class="h-4 w-4 accent-[#FD5D0B]" />
+                  <input v-model="formState.energyType" type="radio" value="Brown Energy" name="energyType" class="h-4 w-4 accent-[#FD5D0B]" />
                   <span>Brown Energy</span>
                 </label>
                 <label class="inline-flex items-center gap-2">
-                  <input type="radio" name="energyType" class="h-4 w-4 accent-[#FD5D0B]" />
+                  <input v-model="formState.energyType" type="radio" value="Both" name="energyType" class="h-4 w-4 accent-[#FD5D0B]" />
                   <span>Both</span>
                 </label>
               </div>
@@ -178,6 +226,7 @@ const socialLinks = [
               </label>
               <select
                 id="consumption-known"
+                v-model="formState.consumptionKnown"
                 name="consumption-known"
                 class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-[#FD5D0B] focus:ring-2 focus:ring-[#FD5D0B]/20"
               >
@@ -193,6 +242,7 @@ const socialLinks = [
                 </label>
                 <input
                   id="consumption"
+                  v-model="formState.consumption"
                   name="consumption"
                   type="text"
                   placeholder="Consumption Figures"
@@ -206,6 +256,7 @@ const socialLinks = [
                 </label>
                 <input
                   id="aq"
+                  v-model="formState.aq"
                   name="aq"
                   type="text"
                   placeholder="AQ"
@@ -220,6 +271,7 @@ const socialLinks = [
               </label>
               <input
                 id="mprn"
+                v-model="formState.mprn"
                 name="mprn"
                 type="text"
                 placeholder="MPRN Number"
@@ -233,6 +285,7 @@ const socialLinks = [
               </label>
               <input
                 id="address"
+                v-model="formState.address"
                 name="address"
                 type="text"
                 placeholder="Supply Site Address"
@@ -240,11 +293,16 @@ const socialLinks = [
               />
             </div>
 
+            <div v-if="feedback" :class="['rounded-xl border px-4 py-3 text-sm', feedbackType === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-red-200 bg-red-50 text-red-700']">
+              {{ feedback }}
+            </div>
+
             <button
               type="submit"
-              class="inline-flex w-full items-center justify-center rounded-full bg-[#FD5D0B] px-6 py-3.5 text-base font-bold uppercase tracking-wide text-white shadow-[0_12px_30px_rgba(253,93,11,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#e95006]"
+              :disabled="isSubmitting"
+              class="inline-flex w-full items-center justify-center rounded-full bg-[#FD5D0B] px-6 py-3.5 text-base font-bold uppercase tracking-wide text-white shadow-[0_12px_30px_rgba(253,93,11,0.22)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#e95006] disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Submit Now
+              {{ isSubmitting ? 'Sending...' : 'Submit Now' }}
             </button>
           </form>
         </div>
