@@ -1,0 +1,92 @@
+Extra content audit for Voltex GAS website
+========================================
+
+This file lists the sections that appear to be generic/template content rather than source-data-driven text.
+
+PAGE: src/views/HomeView.vue
+---------------------------
+- "Reliable Business Gas Supply"
+- "Simple, Affordable Gas You Can Depend On"
+- "Switch to Voltx Power – Smarter Business Gas Starts Here"
+- "Fast Support"
+- "Competitive Tariffs"
+- "Trusted Business Service"
+- "Gas Services Overview"
+- "Tailored Gas Contracts • Metering Services"
+- "Get started in three simple steps"
+- "Request a Quote"
+- "Choose Your Gas Plan"
+- "We Handle the Switch"
+- "Voltx cut our gas costs by 30% — seamless service!"
+- "Powering Businesses with Affordable Gas"
+- "Get a Gas Quote"
+
+PAGE: src/views/AboutView.vue
+----------------------------
+- "Built for businesses that want smarter gas solutions."
+- "Business-first support"
+- "Trusted Team"
+- "Clear communication"
+- "Flexible supply plans"
+- "Expert onboarding"
+- "Long-term partnership"
+- "Straightforward, honest, and business-focused."
+- "Customer-first approach"
+- "Years of sector experience"
+- "Dedicated business support"
+- "Customer-first approach"
+
+PAGE: src/views/GasSupplyView.vue
+--------------------------------
+- "Flexible gas supply for growing businesses."
+- "Plan A / Fixed Rate"
+- "Plan B / Flexible Rate"
+- "Plan C / Managed Supply"
+- "End-to-end gas support that removes friction."
+- "Contract review and comparison"
+- "Smooth switching support"
+- "Metering and usage visibility"
+- "Responsive account guidance"
+
+PAGE: src/views/ServicesView.vue
+--------------------------------
+- "Smart services for your gas requirements."
+- "Tailored Gas Contracts"
+- "Metering Services"
+- "Business Support"
+- "Switching Assistance"
+- "Custom supply arrangements designed around your business size, usage profile, and cost goals."
+- "Accurate monitoring and reporting to help you understand consumption, forecast demand, and reduce waste."
+- "Dedicated guidance to manage renewals, billing questions, and ongoing service improvements."
+- "A streamlined transition approach that keeps your business informed and supported from enquiry to activation."
+
+PAGE: src/views/HelpFaqView.vue
+------------------------------
+- "How do I request a gas quote?"
+- "You can contact our team through the enquiry form or direct call. We will review your business needs and recommended supply options."
+- "Do you support commercial clients?"
+- "Yes. We work with businesses across a range of industries and help compare pricing, contract terms, and service levels."
+- "Can I switch suppliers easily?"
+- "Yes. Our team supports the switch process and helps coordinate the transition with minimal disruption."
+- "What kinds of gas plans are available?"
+- "We offer fixed and flexible options depending on your business profile, usage patterns, and cost priorities."
+- "Everything you need to know."
+
+PAGE: src/views/ContactView.vue
+------------------------------
+- This page is mostly structured correctly with the required labels:
+  - "Name"
+  - "Email Address"
+  - "Telephone No."
+  - "Message"
+  - "Consumption"
+  - "AQ"
+  - "MPRN Number"
+  - "Supply Site Address"
+- All generic wording on this page is UI placeholder content and is acceptable unless the exact source data is later provided.
+
+Summary
+-------
+These entries appear to be standard business-energy template copy and should be checked against the actual Excel data before final publishing.
+
+If the exact spreadsheet is added to the project, these items should be replaced only with verified source data values and not with AI-generated or generic text.
